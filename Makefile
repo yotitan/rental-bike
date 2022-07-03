@@ -142,3 +142,21 @@ help:
 		printf "\n"; \
 	}' \
 	| more $(shell test $(shell uname) = Darwin && echo '--no-init --raw-control-chars')
+	
+setup:
+	python3 -m venv ~/.rental-bike
+	source ~/.rental-bike/bin/activate
+	
+install:
+	pip install --upgrade pip &&\
+	pip install -r requirements.txt
+	
+# test:
+# 	python3 -m pytest -vv -cov=hello_test.py
+	
+lint:
+	pylint --disable R,C src/models/train_model.py
+	
+all:
+	make test
+	make lint

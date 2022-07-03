@@ -20,9 +20,6 @@ def log_production_model( config_path ):
     all_experiments = [ exp.experiment_id for exp in MlflowClient().list_experiments( ) ]
     runs = mlflow.search_runs( experiment_ids=all_experiments )
     
-    # max_accuracy = max( runs["metrics.accuracy"] )
-    # max_accuracy_run_id = list(runs[runs["metrics.accuracy"] == max_accuracy]["run_id"])[0]
-    
     min_rmse = min( runs['metrics.rmse'] )
     min_rmse_run_id = list( runs[runs['metrics.rmse'] == min_rmse]['run_id'] )[0]
     

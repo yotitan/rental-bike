@@ -1,0 +1,47 @@
+schema: '2.0'
+stages:
+  raw_dataset_creation:
+    cmd: python src/data/load_data.py --config=params.yaml
+    deps:
+    - path: data/external/SeoulBikeData.csv
+      md5: 90a05094374005f1187a50f38de39a36
+      size: 627544
+    - path: src/data/load_data.py
+      md5: 089e4fa45235e91ffccd3daca89d370a
+      size: 1709
+    outs:
+    - path: data/raw/rawSeoulBikeData.csv
+      md5: f9f1f917fa9f236cd292ec9ebd09b9d2
+      size: 366136
+  split_data:
+    cmd: python src/data/split_data.py --config=params.yaml
+    deps:
+    - path: data/raw/rawSeoulBikeData.csv
+      md5: f9f1f917fa9f236cd292ec9ebd09b9d2
+      size: 366136
+    - path: src/data/split_data.py
+      md5: 510a2d81fc12f9fab8d99bf9999bd8ae
+      size: 1438
+    outs:
+    - path: data/processed/bike_test.csv
+      md5: 6dc3060a0f4dbfc52c514819b3cd57c3
+      size: 73405
+    - path: data/processed/bike_train.csv
+      md5: 2190db7b7c3547c335aa8f0381020149
+      size: 292908
+  model_train:
+    cmd: python src/models/train_model.py --config=params.yaml
+    deps:
+    - path: data/processed/bike_test.csv
+      md5: 6dc3060a0f4dbfc52c514819b3cd57c3
+      size: 73405
+    - path: data/processed/bike_train.csv
+      md5: 2190db7b7c3547c335aa8f0381020149
+      size: 292908
+    - path: src/models/train_model.py
+      md5: b21da414e8e9140992e7e156950a02c5
+      size: 3225
+    params:
+      params.yaml:
+        random_forest.max_depth: 10
+        random_forest.n_estimators: 30

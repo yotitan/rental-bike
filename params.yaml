@@ -1,0 +1,34 @@
+external_data_config:
+  external_data_csv: data/external/SeoulBikeData.csv
+
+raw_data_config: 
+  raw_data_csv: data/raw/rawSeoulBikeData.csv
+  features: ['Rented Bike Count', 'Hour', 'Humidity(%)', 'Wind speed (m/s)', 'Visibility (10m)', 'Dew point temperature(C)', 'Solar Radiation (MJ/m2)', 'Rainfall(mm)', 'Snowfall (cm)', 'Seasons', 'Holiday', 'Functioning Day']
+  cat_features: ['Seasons', 'Holiday', 'Functioning Day']
+  train_test_split_ratio: 0.2
+  target: 'Rented Bike Count' 
+  random_state: 13
+  new_train_data_csv: data/raw/newSeoulBikeData.csv
+
+processed_data_config:
+  train_data_csv: data/processed/bike_train.csv
+  test_data_csv:  data/processed/bike_test.csv
+
+mlflow_config:
+  artifacts_dir: artifacts
+  experiment_name: model_iteration1
+  run_name: random_forest
+  registered_model_name: random_forest_model
+  remote_server_uri: https://dagshub.com/yotitan/rental-bike.mlflow
+ 
+random_forest: 
+  max_depth: 10
+  n_estimators: 30
+
+model_dir: models/model.joblib
+
+model_webapp_dir: webapp/model_webapp_dir/model.joblib
+
+model_monitor:
+  target_col_name: target
+  monitor_dashboard_html: reports/data_and_target_drift_dashboard.html

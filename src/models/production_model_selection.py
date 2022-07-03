@@ -17,8 +17,8 @@ def log_production_model( config_path ):
     remote_server_uri = mlflow_config['remote_server_uri']
 
     mlflow.set_tracking_uri( remote_server_uri )
-    all_experiments = [ exp.experiment_id for exp in MlflowClient().list_experiments( ) ]
-    runs = mlflow.search_runs( experiment_ids=all_experiments )
+    # all_experiments = [ exp.experiment_id for exp in MlflowClient().list_experiments( ) ]
+    runs = mlflow.search_runs( experiment_ids=[0] )
     
     min_rmse = min( runs['metrics.rmse'] )
     min_rmse_run_id = list( runs[runs['metrics.rmse'] == min_rmse]['run_id'] )[0]
@@ -29,6 +29,7 @@ def log_production_model( config_path ):
         mv = dict(mv)
 
         if mv['run_id'] == min_rmse_run_id:
+            print( 'YES' )
             current_version = mv['version']
             logged_model = mv['source']
             pprint( mv, indent=4 )
@@ -40,6 +41,7 @@ def log_production_model( config_path ):
             )
             
         else:
+            print( 'NO' )
             current_version = mv['version']
             
             client.transition_model_version_stage(

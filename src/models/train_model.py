@@ -88,20 +88,19 @@ def train_and_evaluate( config_path ):
         mlflow.log_metric( 'rmse', rmse )
         mlflow.log_metric( 'mae', mae )
         mlflow.log_metric( 'r2', r2 )
+        
+        tracking_url_type_store = urlparse( mlflow.get_artifact_uri( ) ).scheme
 
-        mlflow.sklearn.log_model( model, 'model' )
-       
-        # tracking_url_type_store = urlparse( mlflow.get_artifact_uri( ) ).scheme
+        if tracking_url_type_store != 'file':
+            mlflow.sklearn.log_model(
+                model, 
+                'model', 
+                registered_model_name = mlflow_config['registered_model_name']
+            )
+        else:
+            mlflow.sklearn.load_model( model, 'model' )
 
-        # if tracking_url_type_store != 'file':
-        #     mlflow.sklearn.log_model(
-        #         model, 
-        #         'model', 
-        #         registered_model_name = mlflow_config['registered_model_name']
-        #     )
-        # else:
-        #     mlflow.sklearn.load_model( model, 'model' )
-
+        # https://github.com/mlflow/mlflow/issues/6012
 
 
 if __name__ == '__main__':

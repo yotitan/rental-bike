@@ -29,7 +29,6 @@ def log_production_model( config_path ):
         mv = dict(mv)
 
         if mv['run_id'] == min_rmse_run_id:
-            print( 'YES' )
             current_version = mv['version']
             logged_model = mv['source']
             pprint( mv, indent=4 )
@@ -41,7 +40,6 @@ def log_production_model( config_path ):
             )
             
         else:
-            print( 'NO' )
             current_version = mv['version']
             
             client.transition_model_version_stage(
